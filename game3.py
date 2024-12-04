@@ -115,7 +115,7 @@ yellow_movement_surf = pygame.math.Vector2(-1, 1)
 # Create a surface for the yellow player square
 surf2 = pygame.Surface((30, 30))
 surf2.fill("red")
-surf_rect2 = surf2.get_rect(topright=(599, 0))  # Start at top-left corner
+surf_rect2 = surf2.get_rect(topright=(599, 1))  # Start at top-left corner
 
 # Movement speed and direction for the yellow player surface
 yellow_speed2 = 150
@@ -129,6 +129,8 @@ player_speed = 100
 # Initialize clock and game status
 clock = pygame.time.Clock()
 game_over = False
+
+score = 0
 
 # Event loop to keep the program running
 running = True
@@ -144,11 +146,12 @@ while running:
                 player_x = 300
                 player_y = 200
                 surf_rect.topleft = (1, 1)  # Reset yellow surface position
-                surf_rect2.topright = (599, 0)
+                surf_rect2.topright = (590, 1)
                 game_over = False
                 note_index = 0
                 melody[note_index].play()  # Restart the melody
                 note_timer = pygame.time.get_ticks()  # Reset timer
+                score = 0 #reset score
 
     # Check if the current note has finished playing and time has passed
     if not game_over:
@@ -199,9 +202,10 @@ while running:
         player_rect = pygame.Rect(player_x, player_y, 40, 100)  # Player rect
         if player_rect.colliderect(surf_rect) or player_rect.colliderect(surf_rect2):
             game_over = True  # Set game over when collision happens
+        score += 1
 
         # White background
-        monitor.fill("white")
+        monitor.fill("darkgrey")
 
         # Draw player character
         draw_player(player_x, player_y)
@@ -215,11 +219,12 @@ while running:
     else:
         # Display game over message
         font = pygame.font.SysFont(None, 55)
-        game_over_text = font.render("GAME OVER!", True, (255, 0, 0))
+        game_over_text = font.render(f"GAME OVER! score: {score}", True, (255, 0, 0))
         monitor.blit(game_over_text, (100, 150))
         pygame.display.flip()
 
     # Frame rate control
+    
     clock.tick(60)
 
 pygame.quit()
